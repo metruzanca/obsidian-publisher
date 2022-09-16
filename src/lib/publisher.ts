@@ -1,16 +1,36 @@
-import { Editor } from "obsidian";
 import { API_URL } from "./constants";
 import axios from 'axios'
+import { getFileData, updateCurrentFrontmatter } from "./obsidianHelpers";
+import PublisherPlugin from "src/main";
+import { getPlatforms } from "./settings";
+import { Body, Response } from "./types";
+
 
 export default class Publisher {
   constructor(
-    private editor: Editor
+    private plugin: PublisherPlugin,
   ) {}
 
   async publish() {
-    console.log('Posting to ', API_URL);
-    const response = await axios(API_URL, { data: 'Hello, Obsidian' });
+    const data = getFileData();
+    const platform = getPlatforms(this.plugin.settings)
+    if (data) {
+      console.log('Posting to ', API_URL);
+      const body: Body = {
+        platform,
+        article: {
+          body_markdown: data.markdown,
+          title: data.displayText,
+          // TODO frontmatter for preprocessing stuff like
+        },
+      }
 
-    console.log(response.status , response.data);
+      const response = await axios.post<Response>(API_URL, body);
+      if (response.data) {
+        console.log('API post response', response.data);
+        await updateCurrentFrontmatter({ id: response.data.id })
+      }
+    }
+
   }
 }

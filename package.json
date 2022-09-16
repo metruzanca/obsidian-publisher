@@ -5,13 +5,15 @@
 	"main": "main.js",
 	"scripts": {
 		"dev": "rollup --config rollup.config.js -w",
-		"build": "rollup --config rollup.config.js"
+		"build": "rollup --config rollup.config.js",
+		"version": "node version-bump.mjs"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/feather-icons": "^4.7.0",
+		"@types/lodash": "^4.14.185",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
@@ -27,9 +29,11 @@
 		"@rollup/plugin-typescript": "^8.5.0",
 		"axios": "^0.27.2",
 		"feather-icons": "^4.29.0",
+		"lodash": "^4.17.21",
 		"rollup": "^2.79.0",
 		"rollup-plugin-copy": "^3.4.0",
 		"rollup-plugin-svelte": "^7.1.0",
-		"svelte-preprocess": "^4.10.7"
+		"svelte-preprocess": "^4.10.7",
+		"uuid": "^9.0.0"
 	}
 }

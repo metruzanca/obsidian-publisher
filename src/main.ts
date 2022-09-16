@@ -1,68 +1,49 @@
-import { addIcon, Command, Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import SampleModal from './lib/publishModal';
-import SampleSettingTab from './lib/settings';
+import { addIcon, Editor, MarkdownView, Notice, Plugin } from 'obsidian';
+import SampleSettingTab, { DEFAULT_SETTINGS } from './lib/settings';
 import { icons } from 'feather-icons';
-import commands from './lib/commands';
 import Publisher from './lib/publisher';
+import { COMMAND_PREFIX } from './lib/constants';
+import { PublisherSettings } from './lib/types';
+//TODO check if the bundle is only including merge or if I'm gonna need to use lodash.merge module
+import { merge } from 'lodash'
+import { getEditor, getFrontmatter } from './lib/obsidianHelpers';
 
 const publishRibbonIcon = icons["upload"].toSvg({ width: 100, height: 100 });
 
-interface MyPluginSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
-}
-
 export default class PublisherPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: PublisherSettings;
 
-  setupRibbon() {
+  initRibbon() {
     addIcon('publish', publishRibbonIcon);
+    this.addRibbonIcon('publish', 'Publish', async (evt: MouseEvent) => {
+      const pub = new Publisher(this);
+      await pub.publish();
+    });
+  }
 
-    const ribbonIconEl = this.addRibbonIcon('publish', 'Publish', async (evt: MouseEvent) => {
-      // new Notice('This is a notice!');
-      const editor = this.getEditor();
-      if (editor) {
-        const pub = new Publisher(editor);
+  initCommands() {
+    this.addCommand({
+      id: `${COMMAND_PREFIX}-publish-current-note`,
+      name: 'Publish current note',
+      async callback() {
+        const pub = new Publisher(this);
         await pub.publish();
       }
     });
-    // ribbonIconEl.addClass('my-plugin-ribbon-class');
-  }
-
-
-  getEditor(): Editor|null {
-    const mdView = this.app.workspace.activeLeaf?.view as MarkdownView;
-    return mdView?.editor || null;
-  }
-
-  loadCommands() {
-    for (const cmd of commands) {
-      this.addCommand(cmd);
-    }
   }
 
 	async onload() {
 		await this.loadSettings();
-    this.setupRibbon();
-		this.loadCommands();
 		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		// this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-		// 	console.log('click', evt);
-		// });
-		// this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+    this.initRibbon();
+		this.initCommands();
 	}
 
-	onunload() {}
+	// onunload() {}
 
 	async loadSettings() {
-		this.settings = {
-      ...DEFAULT_SETTINGS,
-      ...await this.loadData()
-    }
+    // Lodash's merge will deeply merge objects, allowing for more complex state and defaults still applying properly
+    this.settings = merge(DEFAULT_SETTINGS, await this.loadData());
 	}
 
 	async saveSettings() {

@@ -32,11 +32,18 @@ This plugin is just starting development, so I'll be keeping a basic ToDo list h
   - [ ] telegra.ph
   - [ ] medium
   - [ ] Ghost
+- [ ] Image support. (if I can't upload images to given publisher, use imgur instead)
 
 > _This ToDo list does not include all the work that needs to be done on the [Backend](github.com/metruzanca/markdown-publisher-service/). This todolist is mainly for visibility/transparency when I decide to publish the plugin to obsidian._
 
 ## Credits
 Used [lynchjames's obsidian-day-planner](https://github.com/lynchjames/obsidian-day-planner) as a reference for getting svelte setup properly. (_Not sure if I'd use svelte much, but I'd like to have it available to me_) The pre-made rollup also gives me other developer ergonomics such as a src and dist directory. I've also snagged him nice release workflow. Definitely saved me some time getting started.
+
+## Development
+
+Clone this in the plugins folder of the test-vault
+
+https://github.com/pjeby/hot-reload
 
 
 ---
@@ -95,11 +102,6 @@ Quick starting guide for new plugin devs:
 - Make sure you have a `README.md` file in the root of your repo.
 - Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
 
-## How to use
-
-- Clone this repo.
-- `npm i` or `yarn` to install dependencies
-- `npm run dev` to start compilation in watch mode.
 
 ## Manually installing the plugin
 
