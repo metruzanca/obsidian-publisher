@@ -12,13 +12,15 @@ export function getYaml(fileText: string): object | undefined {
 }
 
 function wrapYamlDashes(yaml: string) {
-  return '---\n'.concat(yaml, '---')
+  return '---\n'.concat(yaml, '---\n')
 }
 
 export function updateYaml(fileText: string, yaml: object) {
   const currentYaml = getYaml(fileText);
-  const mergedYaml = merge(currentYaml, yaml)
-  
-  const result = fileText.replace(yamlBlockPattern, wrapYamlDashes(stringifyYaml(mergedYaml)))
-  return result;
+  if (currentYaml) {
+    const mergedYaml = merge(currentYaml, yaml)
+    return fileText.replace(yamlBlockPattern, wrapYamlDashes(stringifyYaml(mergedYaml)))
+  }
+  // Case where frontmatter doesn't exist yet
+  return wrapYamlDashes(stringifyYaml(yaml)).concat(fileText.trim())
 }

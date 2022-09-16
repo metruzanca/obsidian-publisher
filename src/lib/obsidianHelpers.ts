@@ -30,6 +30,7 @@ export async function updateFrontmatter(normalizedPath: string, yaml: object) {
   const currentMd = await app.vault.adapter.read(normalizedPath)
   const newMd = updateYaml(currentMd, yaml);
   await app.vault.adapter.write(normalizedPath, newMd)
+  return newMd;
 }
 
 export async function updateCurrentFrontmatter(yaml: object) {
