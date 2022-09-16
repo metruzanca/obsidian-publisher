@@ -1,3 +1,51 @@
+# Obsidian Publisher
+
+Publish Markdown to various blogging platforms.
+<!-- In the future, change "various" to "any" -->
+
+Publisher adds the ability to "publish" any note, this will send the markdown to the [Publisher backend](github.com/metruzanca/markdown-publisher-service/) for preprocessing and subsequently post the note to configured platforms, such as:
+* [Dev.To](https://dev.to/)
+* [medium](https://medium.com/)
+* [hashnode.com](https://hashnode.com/)
+* [telegra.ph](https://telegra.ph)
+* git
+  * Which enables github pages, or other static site generators e.g. https://blot.im/, https://gohugo.io/ or custom built gatsbyjs or sveltekit apps.
+* [Ghost](https://ghost.org/)
+* More to come...
+
+Note: _No account is needed and the publisher backend doesn't store any submitted information such as api keys / credentials used for publishing._
+
+## ToDo List
+
+This plugin is just starting development, so I'll be keeping a basic ToDo list here.
+
+- [ ] Figure out how to send the obsidian note to the backend.
+- [ ] Support publishing to these platforms:
+  (_I'm guessing these have the best APIs for doing this sort of thing_)
+  - [ ] Devto
+    - [ ] Basic publishing
+    - [ ] Editing
+  - [ ] Hashnode
+  - [ ] Git
+- [ ] Support other popular platforms
+  (_These on the other hand will probably take a bit more to get working_)
+  - [ ] telegra.ph
+  - [ ] medium
+  - [ ] Ghost
+
+> _This ToDo list does not include all the work that needs to be done on the [Backend](github.com/metruzanca/markdown-publisher-service/). This todolist is mainly for visibility/transparency when I decide to publish the plugin to obsidian._
+
+## Credits
+Used [lynchjames's obsidian-day-planner](https://github.com/lynchjames/obsidian-day-planner) as a reference for getting svelte setup properly. (_Not sure if I'd use svelte much, but I'd like to have it available to me_) The pre-made rollup also gives me other developer ergonomics such as a src and dist directory. I've also snagged him nice release workflow. Definitely saved me some time getting started.
+
+
+---
+
+TODO delete this later
+
+<details>
+<summary>Obsidian Base Plugin Readme</summary>
+
 # Obsidian Sample Plugin
 
 This is a sample plugin for Obsidian (https://obsidian.md).
@@ -71,3 +119,5 @@ Quick starting guide for new plugin devs:
 ## API Documentation
 
 See https://github.com/obsidianmd/obsidian-api
+
+</details>
