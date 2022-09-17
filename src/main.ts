@@ -7,6 +7,7 @@ import { PublisherSettings } from './lib/types';
 //TODO check if the bundle is only including merge or if I'm gonna need to use lodash.merge module
 import { merge } from 'lodash'
 import { getEditor, getFrontmatter } from './lib/obsidianHelpers';
+import { obsidianConsoleApi } from './lib/dev';
 
 const publishRibbonIcon = icons["upload"].toSvg({ width: 100, height: 100 });
 
@@ -37,6 +38,7 @@ export default class PublisherPlugin extends Plugin {
 		this.addSettingTab(new SampleSettingTab(this.app, this));
     this.initRibbon();
 		this.initCommands();
+    await obsidianConsoleApi();
 	}
 
 	// onunload() {}

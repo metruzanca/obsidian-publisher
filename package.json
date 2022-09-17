@@ -4,8 +4,8 @@
 	"description": "Publish Markdown to various blogging platforms.",
 	"main": "main.js",
 	"scripts": {
-		"dev": "rollup --config rollup.config.js -w",
-		"build": "rollup --config rollup.config.js",
+		"dev": "NODE_ENV=development rollup --config rollup.config.js -w",
+		"build": "NODE_ENV=production rollup --config rollup.config.js",
 		"version": "node version-bump.mjs"
 	},
 	"keywords": [],
