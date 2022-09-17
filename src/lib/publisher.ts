@@ -5,6 +5,7 @@ import PublisherPlugin from "src/main";
 import { getPlatforms } from "./settings";
 import { Body, Response } from "./types";
 import { v4 } from 'uuid'
+import { Notice } from "obsidian";
 
 export default class Publisher {
   constructor(
@@ -31,6 +32,8 @@ export default class Publisher {
       const response = await axios.post<Response>(API_URL, body);
       if (response.data) {
         console.log('API post response', response.data);
+        const platforms = Object.keys(response.data.platforms)
+        new Notice(`Published to ${JSON.stringify(platforms)}`)
       }
     }
 

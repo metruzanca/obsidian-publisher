@@ -1,12 +1,11 @@
-import { addIcon, Editor, MarkdownView, Notice, Plugin } from 'obsidian';
+import { addIcon, Plugin } from 'obsidian';
 import SampleSettingTab, { DEFAULT_SETTINGS } from './lib/settings';
 import { icons } from 'feather-icons';
 import Publisher from './lib/publisher';
-import { COMMAND_PREFIX } from './lib/constants';
+import { COMMANDS } from './lib/constants';
 import { PublisherSettings } from './lib/types';
 //TODO check if the bundle is only including merge or if I'm gonna need to use lodash.merge module
 import { merge } from 'lodash'
-import { getEditor, getFrontmatter } from './lib/obsidianHelpers';
 import { obsidianConsoleApi } from './lib/dev';
 
 const publishRibbonIcon = icons["upload"].toSvg({ width: 100, height: 100 });
@@ -24,8 +23,7 @@ export default class PublisherPlugin extends Plugin {
 
   initCommands() {
     this.addCommand({
-      id: `${COMMAND_PREFIX}-publish-current-note`,
-      name: 'Publish current note',
+      ...COMMANDS.PUBLISH_CURRENT,
       async callback() {
         const pub = new Publisher(this);
         await pub.publish();
