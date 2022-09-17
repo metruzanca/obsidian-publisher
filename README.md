@@ -41,10 +41,7 @@ Used [lynchjames's obsidian-day-planner](https://github.com/lynchjames/obsidian-
 
 ## Development
 
-Clone this in the plugins folder of the test-vault
-
-https://github.com/pjeby/hot-reload
-
+[Kanban Board](https://github.com/users/metruzanca/projects/7)
 
 ---
 

@@ -1,34 +1,39 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import PublisherPlugin from "src/main";
-import { PlatformUnion, PlatformName, PublisherSettings, CanonicalSource } from "./types";
+import { PlatformUnion, PlatformName, PublisherSettings, CanonicalSource, PublisherData } from "./types";
 
 type AddPublisherOptions = {
   name: PlatformName
   createTokenUrl: string
 }
 
-export const DEFAULT_SETTINGS: PublisherSettings = {
-  canonicalSource: CanonicalSource.None,
-  publishers: {
-    DevTo: {
-      enabled: false,
-    },
-    HashNode: {
-      enabled: false,
-    },
-    Medium: {
-      enabled: false,
+export const DEFAULT_DATA: PublisherData = {
+  settings: {
+    canonicalSource: CanonicalSource.None,
+    publishers: {
+      DevTo: {
+        enabled: false,
+      },
+      HashNode: {
+        enabled: false,
+      },
+      Medium: {
+        enabled: false,
+      }
     }
-  }
+  },
+  articles: []
 }
 
 
 export default class SampleSettingTab extends PluginSettingTab {
   plugin: PublisherPlugin;
+  settings: PublisherSettings
 
   constructor(app: App, plugin: PublisherPlugin) {
     super(app, plugin);
     this.plugin = plugin;    
+    this.settings = plugin.data.settings;
   }
 
   addSeparator(containerEl: HTMLElement) {
@@ -43,26 +48,21 @@ export default class SampleSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName(`Enable posting to ${options.name}`)
       .addToggle(toggle => toggle
-        .setValue(this.plugin.settings.publishers[options.name].enabled)
+        .setValue(this.settings.publishers[options.name].enabled)
         .onChange(async state => {
-          this.plugin.settings.publishers[options.name].enabled = state;
+          this.settings.publishers[options.name].enabled = state;
           await this.plugin.saveSettings();
         }))
-
-    // TODO figure out how I can hide the api-key fields using <input type="password"/>
     new Setting(containerEl)
       .setName(`${options.name} Api-Key`)
-      // TODO get this link in here to be clickable
       .setDesc(`Create one here: ${options.createTokenUrl}`)
       .addText(text => text
         .setPlaceholder('api-key')
-        .setValue(this.plugin.settings.publishers[options.name].apiKey || '')
+        .setValue(this.settings.publishers[options.name].apiKey || '')
         .onChange(async (value) => {
-          this.plugin.settings.publishers[options.name].apiKey = value;
+          this.settings.publishers[options.name].apiKey = value;
           await this.plugin.saveSettings();
         }))
-      // TODO figure out how to disable the input
-      // .setDisabled(!this.plugin.settings.publishers[options.name].enabled)
   }
 
   display(): void {
@@ -77,12 +77,12 @@ export default class SampleSettingTab extends PluginSettingTab {
       .setDesc(`Do you have a "main blog" that you'd like all other blogs to link to?`)
       .addDropdown(drop => drop
         .addOption(CanonicalSource.None, CanonicalSource.None)
-        .addOptions(getEnabledPlatforms(this.plugin.settings.publishers))
+        .addOptions(getEnabledPlatforms(this.settings.publishers))
         .onChange(async value => {
-          this.plugin.settings.canonicalSource = value as CanonicalSource;
+          this.settings.canonicalSource = value as CanonicalSource;
           await this.plugin.saveSettings()
         })
-        .setValue(this.plugin.settings.canonicalSource)
+        .setValue(this.settings.canonicalSource)
       )
       
 
@@ -92,20 +92,16 @@ export default class SampleSettingTab extends PluginSettingTab {
     })
 
     // TODO Hashnode requires gql, I'll do that later. 
-
-    // this.addSeparator(containerEl);
-
     // this.addPublisher(containerEl, {
     //   name: PlatformName.HashNode,
     //   createTokenUrl: 'https://hashnode.com/settings/developer'
     // })
 
-    // this.addSeparator(containerEl);
-
-    this.addPublisher(containerEl, {
-      name: PlatformName.Medium,
-      createTokenUrl: 'https://medium.com/me/settings'
-    })
+    // TODO backend adapter missing
+    // this.addPublisher(containerEl, {
+    //   name: PlatformName.Medium,
+    //   createTokenUrl: 'https://medium.com/me/settings'
+    // })
   }
 }
 

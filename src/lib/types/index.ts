@@ -84,16 +84,6 @@ type PublishedArticleMeta = {
   [PlatformName.Medium]: any
 }
 
-type PublishedArticle = {
-  path: string // TODO support moving published files around
-  platforms: PublishedArticleMeta
-}
-
-export type PublisherData = {
-  settings: PublisherSettings;
-  articles: PublishedArticle[]
-}
-
 export enum CanonicalSource {
   DevTo = 'DevTo',
   HashNode = 'HashNode',
@@ -118,4 +108,15 @@ export interface PublisherSettings {
       apiKey?: string
     }
   }
+}
+
+
+export type PublisherData = {
+  settings: PublisherSettings;
+  articles: PublishedArticle[]
+}
+
+type PublishedArticle = {
+  path: string
+  platforms: PublishedArticleMeta
 }

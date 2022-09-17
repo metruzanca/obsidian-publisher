@@ -1,9 +1,9 @@
 import { addIcon, Plugin } from 'obsidian';
-import SampleSettingTab, { DEFAULT_SETTINGS } from './lib/settings';
+import SampleSettingTab, { DEFAULT_DATA } from './lib/settings';
 import { icons } from 'feather-icons';
 import Publisher from './lib/publisher';
 import { COMMANDS } from './lib/constants';
-import { PublisherSettings } from './lib/types';
+import { PublisherData, PublisherSettings } from './lib/types';
 //TODO check if the bundle is only including merge or if I'm gonna need to use lodash.merge module
 import { merge } from 'lodash'
 import { obsidianConsoleApi } from './lib/dev';
@@ -11,7 +11,7 @@ import { obsidianConsoleApi } from './lib/dev';
 const publishRibbonIcon = icons["upload"].toSvg({ width: 100, height: 100 });
 
 export default class PublisherPlugin extends Plugin {
-	settings: PublisherSettings;
+  data: PublisherData;
 
   initRibbon() {
     addIcon('publish', publishRibbonIcon);
@@ -43,10 +43,10 @@ export default class PublisherPlugin extends Plugin {
 
 	async loadSettings() {
     // Lodash's merge will deeply merge objects, allowing for more complex state and defaults still applying properly
-    this.settings = merge(DEFAULT_SETTINGS, await this.loadData());
+    this.data = merge(DEFAULT_DATA, await this.loadData());
 	}
 
 	async saveSettings() {
-		await this.saveData(this.settings);
+		await this.saveData(this.data);
 	}
 }
