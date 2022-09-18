@@ -1,40 +1,38 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import PublisherPlugin from "src/main";
-import { PlatformUnion, PlatformName, PublisherSettings, CanonicalSource, PublisherData } from "./types";
+import { PlatformUnion, PlatformName, PublisherSettings, CanonicalSource } from "./types";
 
 type AddPublisherOptions = {
   name: PlatformName
   createTokenUrl: string
 }
 
-export const DEFAULT_DATA: PublisherData = {
-  settings: {
-    canonicalSource: CanonicalSource.None,
-    publishers: {
-      DevTo: {
-        enabled: false,
-      },
-      HashNode: {
-        enabled: false,
-      },
-      Medium: {
-        enabled: false,
-      }
+export const DEFAULT_SETTINGS: PublisherSettings = {
+  canonicalSource: CanonicalSource.None,
+  publishers: {
+    DevTo: {
+      enabled: false,
+    },
+    HashNode: {
+      enabled: false,
+    },
+    Medium: {
+      enabled: false,
     }
-  },
-  articles: []
+  }
 }
 
-
-export default class SampleSettingTab extends PluginSettingTab {
+export default class PublisherSettingTab extends PluginSettingTab {
   plugin: PublisherPlugin;
   settings: PublisherSettings
 
   constructor(app: App, plugin: PublisherPlugin) {
     super(app, plugin);
     this.plugin = plugin;    
-    this.settings = plugin.data.settings;
+    this.settings = plugin.db.settings;
   }
+
+  saveSettings = () => this.plugin.db.saveData();
 
   addSeparator(containerEl: HTMLElement) {
     const d1 = containerEl.createEl('div')
@@ -51,7 +49,7 @@ export default class SampleSettingTab extends PluginSettingTab {
         .setValue(this.settings.publishers[options.name].enabled)
         .onChange(async state => {
           this.settings.publishers[options.name].enabled = state;
-          await this.plugin.saveSettings();
+          await this.saveSettings();
         }))
     new Setting(containerEl)
       .setName(`${options.name} Api-Key`)
@@ -61,7 +59,7 @@ export default class SampleSettingTab extends PluginSettingTab {
         .setValue(this.settings.publishers[options.name].apiKey || '')
         .onChange(async (value) => {
           this.settings.publishers[options.name].apiKey = value;
-          await this.plugin.saveSettings();
+          await this.saveSettings();
         }))
   }
 
@@ -80,7 +78,7 @@ export default class SampleSettingTab extends PluginSettingTab {
         .addOptions(getEnabledPlatforms(this.settings.publishers))
         .onChange(async value => {
           this.settings.canonicalSource = value as CanonicalSource;
-          await this.plugin.saveSettings()
+          await this.saveSettings()
         })
         .setValue(this.settings.canonicalSource)
       )
@@ -113,16 +111,4 @@ function getEnabledPlatforms(publishers: PublisherSettings['publishers']) {
     }
   }
   return options;
-}
-
-export function getPlatforms(settings: PublisherSettings): PlatformUnion[] {
-  const publishers: PlatformUnion[] = []
-  for (const [name, options] of Object.entries(settings.publishers)) {
-    if (options.enabled && options.apiKey) {
-      publishers.push({
-        apiKey: options.apiKey, name: name as PlatformName
-      })
-    }
-  }
-  return publishers;
 }

@@ -70,20 +70,6 @@ export type Response = {
   }
 }
 
-
-type PublishedArticleMeta = {
-  [PlatformName.DevTo]: {
-    id: number
-    title: string
-    description: string
-    slug: string
-    path: string
-    url: string
-  }
-  [PlatformName.HashNode]: any
-  [PlatformName.Medium]: any
-}
-
 export enum CanonicalSource {
   DevTo = 'DevTo',
   HashNode = 'HashNode',
@@ -113,10 +99,22 @@ export interface PublisherSettings {
 
 export type PublisherData = {
   settings: PublisherSettings;
-  articles: PublishedArticle[]
+  articles: Record<string, PublishedArticle>
 }
 
-type PublishedArticle = {
+export type PublishedArticle = {
+  id: string
   path: string
   platforms: PublishedArticleMeta
+}
+
+export type PublishedArticleMeta = {
+  [PlatformName.DevTo]?: {
+    id: number
+    // status: 0
+    publishedAt: string
+    url: PublishedUrl
+  }
+  // [PlatformName.HashNode]?: any
+  // [PlatformName.Medium]?: any
 }

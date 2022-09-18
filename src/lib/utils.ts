@@ -1,0 +1,1 @@
+export const runAsync = async (cb: () => void) => cb();
