@@ -11,3 +11,8 @@ export const COMMANDS = {
     name: 'Publish current note',
   }
 }
+
+export namespace ICONS {
+  export const SAVE = 'save'
+  export const PUBLISH = 'publish'
+}

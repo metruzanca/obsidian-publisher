@@ -23,6 +23,8 @@ export default class Data {
 
   constructor(plugin: PublisherPlugin) {
     this.plugin = plugin;
+    //@ts-ignore
+    window.deleteAll = this.deleteAll
   }
 
   get settings() {
@@ -54,6 +56,12 @@ export default class Data {
 
     this.saveData() // PSA Remember to do this
     return data
+  }
+
+  deleteAll() {
+    //@ts-ignore
+    this.data.articles = {};
+    this.saveData();
   }
 
   // updateArticle() {}
